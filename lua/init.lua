@@ -18,3 +18,4 @@
 
 -- to avoid fn.setqflist
 -- * nvim symbols: set_errorlist
+
