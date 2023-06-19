@@ -1,5 +1,2 @@
 
-
-set_errorlist
-
-vim.fn -> vim.call -> nlua_call -> call_func
+with set_errorlist & tv_{dict,list}_*, holding the typval list to avoid repeatly convert qf/loclist from lua to typval
