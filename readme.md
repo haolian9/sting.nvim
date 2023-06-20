@@ -1,4 +1,4 @@
-this plugin tries to provide intuitive apis for quickfix/location list
+an opinionated way to use quickfix/location list
 
 ## usages
 
