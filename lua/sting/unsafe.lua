@@ -20,6 +20,7 @@ ffi.cdef([[
                     dict_T *what);
 
   list_T *tv_list_alloc(const long len);
+  void tv_list_init_static(list_T *list);
   void tv_list_append_dict(list_T *const list, dict_T *const dict);
   void tv_list_free(list_T *const list);
 
@@ -77,7 +78,11 @@ do
   function lists.free(list) C.tv_list_free(list) end
   ---@param len number
   ---@return clist @list_T *
-  function lists.alloc(len) return C.tv_list_alloc(len) end
+  function lists.alloc(len)
+    local list = C.tv_list_alloc(len)
+    C.tv_list_init_static(list) -- to avoid it being gc
+    return list
+  end
   ---@param list clist
   ---@param dict cdict
   function lists.append_dict(list, dict) C.tv_list_append_dict(list, dict) end
