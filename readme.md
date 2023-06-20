@@ -8,11 +8,13 @@ to replace `setqflist()`
 ---@type fun(line: string): sting.Item
 local rg_to_qf
 
-quickfix.items:set(ns, {})
-for line in output_iter do
-  quickfix.items:append(ns, rg_to_qf(line))
+local qf = require'sting.quickfix'.namespace('grep')
+
+qf:reset()
+for lines in fn.batch(output_iter, 512) do
+  qf:extend(fn.concrete(fn.map(rg_to_qf, lines)))
 end
-quickfix:feed_vim(ns)
+qf:feed_vim(ns)
 ```
 
 
