@@ -18,7 +18,7 @@ do
     local items = self.items:get(ns)
     if items == nil then return jelly.warn("no qf items under namespace '%s'", ns) end
     vim.fn.setloclist(self.winid, {}, "f") -- intended to clear the whole quickfix stack
-    vim.fn.setloclist(self.winid, {}, " ", { items = items })
+    vim.fn.setloclist(self.winid, items, " ")
   end
 
   function LocMod:switch()
