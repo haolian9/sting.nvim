@@ -1,11 +1,13 @@
 local jelly = require("infra.jellyfish")("sting.location", vim.log.levels.DEBUG)
-local tui = require("tui")
+
 local types = require("sting.types")
+local tui = require("tui")
 
 local api = vim.api
 
 ---@class sting.LocMod
 ---@field private winid number
+---@field private last_fed_ns string?
 ---@field items sting.Items
 local LocMod = {}
 do
@@ -19,11 +21,13 @@ do
     if items == nil then return jelly.warn("no qf items under namespace '%s'", ns) end
     vim.fn.setloclist(self.winid, {}, "f") -- intended to clear the whole quickfix stack
     vim.fn.setloclist(self.winid, items, " ")
+    self.last_fed_ns = ns
   end
 
   function LocMod:switch()
     tui.menu(self.items:namespaces(), { prompt = "switch location namespace" }, function(ns)
       if ns == nil then return end
+      if ns == self.last_fed_ns then return end
       self:feed_vim(ns)
     end)
   end
