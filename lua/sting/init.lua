@@ -17,3 +17,8 @@
 -- * performance
 --   * ~~embrace the quickfix stack for lesser data copying~~ no way to remove a member from the stack
 --   * ~~avoid calling fn.setqflist~~ impossible
+
+return {
+  quickfix = require("sting.quickfix"),
+  location = require("sting.location"),
+}

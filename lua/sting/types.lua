@@ -20,24 +20,24 @@ local listlib = require("infra.listlib")
 ---@field valid 0|1
 
 do
-  ---it's intended to no having append()
   ---@class sting.Shelf
   ---@field private name string
-  ---@field private list sting.Pickle[]
+  ---@field private shelf sting.Pickle[]
   local Prototype = {}
 
   Prototype.__index = Prototype
 
-  function Prototype:reset() self.list = {} end
+  function Prototype:reset() self.shelf = {} end
+
+  function Prototype:append(pickle) table.insert(self.shelf, pickle) end
 
   ---@param list sting.Pickle[]
-  function Prototype:extend(list) listlib.extend(self.list, list) end
+  function Prototype:extend(list) listlib.extend(self.shelf, list) end
 
-  function Prototype:feed_vim()
-    vim.fn.setqflist({}, "f")
-    vim.fn.setqflist(self.list, " ")
-  end
+  function Prototype:feed_vim() error("not implemented") end
 
+  ---@param name string
+  ---@return sting.Shelf
   function M.Shelf(name) return setmetatable({ name = name, list = {} }, Prototype) end
 end
 
