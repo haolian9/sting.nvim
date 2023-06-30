@@ -20,12 +20,18 @@ local listlib = require("infra.listlib")
 ---@field valid 0|1
 
 do
+  ---@alias Transformer fun(info: {quickfix: 0|1, winid: integer, id: integer, start_idx: integer, end_idx: integer}): string[]
+
   ---@class sting.Shelf
   ---@field private name string
+  ---@field private transformer Transformer
   ---@field private shelf sting.Pickle[]
   local Prototype = {}
 
   Prototype.__index = Prototype
+
+  ---@param fn Transformer
+  function Prototype:transform(fn) self.transformer = fn end
 
   function Prototype:reset() self.shelf = {} end
 
@@ -34,6 +40,7 @@ do
   ---@param list sting.Pickle[]
   function Prototype:extend(list) listlib.extend(self.shelf, list) end
 
+  ---todo: or feed_vim(transformer)
   function Prototype:feed_vim() error("not implemented") end
 
   ---@param name string

@@ -16,8 +16,14 @@ local function Shelf(room, name)
   function shelf:feed_vim()
     ---@diagnostic disable: invisible
     if self.room.last_fed_name == self.name then return end
-    vim.fn.setloclist(self.room.winid, {}, "f")
-    vim.fn.setloclist(self.room.winid, self.shelf, " ")
+    do
+      vim.fn.setloclist(self.room.winid, {}, "f")
+      if self.transformer == nil then
+        vim.fn.setloclist(self.room.winid, self.shelf, " ")
+      else
+        vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = self.transformer })
+      end
+    end
     self.room.last_fed_name = self.name
   end
   return shelf
