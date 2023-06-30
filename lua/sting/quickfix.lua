@@ -1,32 +1,27 @@
 local M = {}
 
-local jelly = require("infra.jellyfish")("sting.quickfix", vim.log.levels.DEBUG)
+local dictlib = require("infra.dictlib")
 
 local types = require("sting.types")
 local tui = require("tui")
 
-M.items = types.Items({})
+---@type {[string]: sting.Shelf}
+local shelves = {}
 
----@private
-M.last_fed_ns = nil
-
---caution: the quickfix stack will be cleared after this function
----@param ns string
----@return true?
-function M.feed_vim(ns)
-  local items = M.items:get(ns)
-  if items == nil then return jelly.warn("no qf items under namespace '%s'", ns) end
-  vim.fn.setqflist({}, "f") -- intended to clear the whole quickfix stack
-  vim.fn.setqflist(items, " ")
-  M.last_fed_ns = ns
+---@param name string @the unique name for this shelf
+---@return sting.Shelf
+function M.shelf(name)
+  if shelves[name] == nil then shelves[name] = types.Shelf(name) end
+  return shelves[name]
 end
 
 function M.switch()
-  tui.menu(M.items:namespaces(), { prompt = "switch quickfix namespace" }, function(ns)
-    if ns == nil then return end
-    if ns == M.last_fed_ns then return end
-    M.feed_vim(ns)
+  tui.menu(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
+    if name == nil then return end
+    M.shelf(name):feed_vim()
   end)
 end
+
+function M.clear() shelves = {} end
 
 return M

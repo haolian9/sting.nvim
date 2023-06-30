@@ -1,6 +1,10 @@
+--- the names, pickle and shelf, come from python, which are its stdlibs
+
+local M = {}
+
 local listlib = require("infra.listlib")
 
----@class sting.Item
+---@class sting.Pickle
 ---@field bufnr? number
 ---@field filename? string
 ---@field module? string
@@ -15,51 +19,26 @@ local listlib = require("infra.listlib")
 ---@field nr number
 ---@field valid 0|1
 
----@class sting.Items
----@field private store {[string]: sting.Item[]}
-local Items = {}
 do
-  Items.__index = Items
+  ---it's intended to no having append()
+  ---@class sting.Shelf
+  ---@field private name string
+  ---@field private list sting.Pickle[]
+  local Prototype = {}
 
-  function Items:get(ns) return self.store[ns] end
+  Prototype.__index = Prototype
 
-  function Items:clear(ns) self.store[ns] = nil end
+  function Prototype:reset() self.list = {} end
 
-  ---@param items sting.Item[]
-  function Items:set(ns, items) self.store[ns] = items end
+  ---@param list sting.Pickle[]
+  function Prototype:extend(list) listlib.extend(self.list, list) end
 
-  ---@param item sting.Item
-  function Items:append(ns, item)
-    if self.store[ns] == nil then
-      self.store[ns] = { item }
-    else
-      table.insert(self.store[ns], item)
-    end
+  function Prototype:feed_vim()
+    vim.fn.setqflist({}, "f")
+    vim.fn.setqflist(self.list, " ")
   end
 
-  ---@param items sting.Item[]
-  function Items:extend(ns, items)
-    if self.store[ns] == nil then
-      self.store[ns] = items
-    else
-      listlib.extend(self.store[ns], items)
-    end
-  end
-
-  function Items:namespaces()
-    local list = {}
-    for key, _ in pairs(self.store) do
-      table.insert(list, key)
-    end
-    return list
-  end
+  function M.Shelf(name) return setmetatable({ name = name, list = {} }, Prototype) end
 end
 
-return {
-  ---@param store? table
-  ---@return sting.Items
-  Items = function(store)
-    store = store or {}
-    return setmetatable({ store = {} }, Items)
-  end,
-}
+return M

@@ -8,14 +8,12 @@
 -- design choices
 -- * no stack: setqflist({}, 'f')
 -- * namespace
+-- * textfunc
 --
 -- todo:
--- * hijack setqflist outside sting.quickfix
+-- * textfunc
 -- * utilize :cfile to have caches
+-- * ~~hijack setqflist outside sting.quickfix~~ every part of my nvim rice use quickfix/location list should use this instead
 -- * performance
---   * embrace the quickfix stack for lesser data copying
---   * avoid calling fn.setqflist
-
--- to avoid fn.setqflist
--- * nvim symbols: set_errorlist
-
+--   * ~~embrace the quickfix stack for lesser data copying~~ no way to remove a member from the stack
+--   * ~~avoid calling fn.setqflist~~ impossible
