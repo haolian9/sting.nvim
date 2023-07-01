@@ -11,16 +11,16 @@ local last_fed_name = nil
 local shelves = {}
 
 local function Shelf(name)
-  local shelf = types.Shelf(name)
+  local shelf = types.Shelf(name, true)
   function shelf:feed_vim()
     ---@diagnostic disable: invisible
     if last_fed_name == self.name then return end
     do
       vim.fn.setqflist({}, "f")
-      if self.transformer == nil then
+      if self.flavor == nil then
         vim.fn.setqflist(self.shelf, " ")
       else
-        vim.fn.setqflist({}, " ", { items = self.shelf, quickfixtextfunc = self.transformer })
+        vim.fn.setqflist({}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
       end
     end
     last_fed_name = self.name

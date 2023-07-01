@@ -11,17 +11,18 @@ local api = vim.api
 ---@param room sting.location.Room
 ---@param name string
 local function Shelf(room, name)
-  local shelf = types.Shelf(name)
+  local shelf = types.Shelf(name, true)
   shelf.room = room
+
   function shelf:feed_vim()
     ---@diagnostic disable: invisible
     if self.room.last_fed_name == self.name then return end
     do
       vim.fn.setloclist(self.room.winid, {}, "f")
-      if self.transformer == nil then
+      if self.flavor == nil then
         vim.fn.setloclist(self.room.winid, self.shelf, " ")
       else
-        vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = self.transformer })
+        vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
       end
     end
     self.room.last_fed_name = self.name
