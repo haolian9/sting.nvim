@@ -2,7 +2,10 @@
 
 local M = {}
 
+local fn = require("infra.fn")
+local fs = require("infra.fs")
 local listlib = require("infra.listlib")
+local strlib = require("infra.strlib")
 
 ---@class sting.Pickle
 ---@field bufnr? number
@@ -20,15 +23,33 @@ local listlib = require("infra.listlib")
 ---@field valid? 0|1
 
 do
+  ---customs:
+  ---* patten = '{fpath}|{lnum}|{text}'
+  ---* {fpath} will be shortened or bufnr or empty
+  ---* {col} no more
+  ---* {text} will be left-trimmed
   ---@param pickle sting.Pickle
   ---@return string @pattern='<filename>|<lnum> col <col>|<text>'
   local function default_flavor(pickle)
-    ---todo: filename is not always available
-    if pickle.filename ~= nil then
-      return string.format("%s|%d col %d|%s", vim.fn.pathshorten(pickle.filename), pickle.lnum, pickle.col, pickle.text)
+    local text
+    if pickle.text ~= nil then
+      text = strlib.ltrim(pickle.text)
     else
-      return string.format("|%d col %d|%s", pickle.lnum, pickle.col, pickle.text)
+      text = ""
     end
+
+    local fpath
+    if pickle.filename ~= nil then
+      fpath = fs.shorten(pickle.filename)
+    elseif pickle.bufnr ~= nil then
+      fpath = string.format("buf#%d", pickle.bufnr)
+    else
+      fpath = ""
+    end
+
+    local lnum = fn.nilor(pickle.lnum, 0)
+
+    return string.format("%s|%d|%s", fpath, lnum, text)
   end
 
   ---@class sting.Shelf
@@ -69,9 +90,10 @@ do
       for _, pickle in ipairs(self.shelf) do
         table.insert(thelf, self.flavor(pickle))
       end
+      assert(#thelf == #self.shelf)
       self.thelf = thelf
+      self.shelf = {}
     end
-    assert(#self.thelf == #self.shelf)
     return self.thelf
   end
 
