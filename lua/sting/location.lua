@@ -1,7 +1,7 @@
 local M = {}
 
 local dictlib = require("infra.dictlib")
-local jelly = require("infra.jellyfish")("sting.location", vim.log.levels.DEBUG)
+local jelly = require("infra.jellyfish")("sting.location", "debug")
 
 local types = require("sting.types")
 local tui = require("tui")

@@ -1,7 +1,7 @@
 local M = {}
 
 local ex = require("infra.ex")
-local jelly = require("infra.jellyfish")("sting.rhs", vim.log.levels.DEBUG)
+local jelly = require("infra.jellyfish")("sting.rhs", "DEBUG")
 
 local api = vim.api
 
@@ -21,25 +21,26 @@ do
     do
       local wininfo = vim.fn.getwininfo(winid)[1]
       local expect_idx = api.nvim_win_get_cursor(winid)[1]
-      if wininfo.loclist == 1 then ---must check loclist first, as .quickfix=1 in both location and quickfix window
-        local held_idx = vim.fn.getqflist({ idx = 0 }).idx
+      ---must check loclist first, as .quickfix=1 in both location and quickfix window
+      if wininfo.loclist == 1 then
+        local held_idx = vim.fn.getloclist(0, { idx = 0 }).idx
         if held_idx < 1 then return jelly.debug("no lines in current quickfix list") end
         if held_idx ~= expect_idx then
           vim.fn.setloclist({}, "a", { idx = expect_idx })
           held_idx = expect_idx
         end
         ---@type sting.Pickle
-        local pickle = vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
+        local pickle = vim.fn.getloclist(0, { idx = held_idx, items = 0 }).items[1]
         bufnr = assert(pickle.bufnr)
       elseif wininfo.quickfix == 1 then
-        local held_idx = vim.fn.getloclist(0, { idx = 0 }).idx
+        local held_idx = vim.fn.getqflist({ idx = 0 }).idx
         if held_idx < 1 then return jelly.debug("no lines in current location list") end
         if held_idx ~= expect_idx then
           vim.fn.setqflist({}, "a", { idx = expect_idx })
           held_idx = expect_idx
         end
         ---@type sting.Pickle
-        local pickle = vim.fn.getloclist(0, { idx = held_idx, items = 0 }).items[1]
+        local pickle = vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
         bufnr = assert(pickle.bufnr)
       else
         jelly.err("winid=%d, wininfo=%s", winid, vim.inspect(wininfo))

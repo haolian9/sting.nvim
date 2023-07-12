@@ -90,10 +90,9 @@ do
       for _, pickle in ipairs(self.shelf) do
         table.insert(thelf, self.flavor(pickle))
       end
-      assert(#thelf == #self.shelf)
       self.thelf = thelf
-      self.shelf = {}
     end
+    assert(#self.thelf == #self.shelf)
     return self.thelf
   end
 
