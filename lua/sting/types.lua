@@ -56,26 +56,16 @@ do
   ---@field private name string
   ---@field private flavor? fun(pickle: sting.Pickle): string
   ---@field private shelf sting.Pickle[]
-  ---@field private thelf? string[]
   local Prototype = {}
 
   Prototype.__index = Prototype
 
-  function Prototype:reset()
-    self.shelf = {}
-    self.thelf = nil
-  end
+  function Prototype:reset() self.shelf = {} end
 
-  function Prototype:append(pickle)
-    assert(self.thelf == nil, "after fed vim, this shelf is supposed to be frozen")
-    table.insert(self.shelf, pickle)
-  end
+  function Prototype:append(pickle) table.insert(self.shelf, pickle) end
 
   ---@param list sting.Pickle[]
-  function Prototype:extend(list)
-    assert(self.thelf == nil, "after fed vim, this shelf is supposed to be frozen")
-    listlib.extend(self.shelf, list)
-  end
+  function Prototype:extend(list) listlib.extend(self.shelf, list) end
 
   function Prototype:feed_vim() error("not implemented") end
 
@@ -85,15 +75,7 @@ do
   function Prototype:quickfixtextfunc(info)
     assert(self.flavor ~= nil)
     assert(info.start_idx == 1 and info.end_idx == #self.shelf)
-    if self.thelf == nil then
-      local thelf = {}
-      for _, pickle in ipairs(self.shelf) do
-        table.insert(thelf, self.flavor(pickle))
-      end
-      self.thelf = thelf
-    end
-    assert(#self.thelf == #self.shelf)
-    return self.thelf
+    return fn.concrete(fn.map(self.flavor, self.shelf))
   end
 
   ---@param name string

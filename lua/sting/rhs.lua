@@ -15,10 +15,9 @@ do
 
   ---@param mode 'above'|'below'|'left'|'right'
   function M.split(mode)
-    local winid = api.nvim_get_current_win()
-
     local bufnr
     do
+      local winid = api.nvim_get_current_win()
       local wininfo = vim.fn.getwininfo(winid)[1]
       local expect_idx = api.nvim_win_get_cursor(winid)[1]
       ---must check loclist first, as .quickfix=1 in both location and quickfix window
