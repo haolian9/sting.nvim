@@ -1,7 +1,7 @@
 local M = {}
 
 local ex = require("infra.ex")
-local jelly = require("infra.jellyfish")("sting.rhs", "DEBUG")
+local jelly = require("infra.jellyfish")("sting.rhs")
 
 local api = vim.api
 
