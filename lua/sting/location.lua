@@ -46,7 +46,7 @@ do
   end
 
   function Prototype:switch()
-    tui.menu(dictlib.keys(self.shelves), { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
+    tui.select(dictlib.keys(self.shelves), { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
       if name == nil then return end
       if name == self.last_fed_name then return end
       assert(self.shelves[name]):feed_vim()

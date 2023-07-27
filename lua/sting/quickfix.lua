@@ -36,7 +36,7 @@ function M.shelf(name)
 end
 
 function M.switch()
-  tui.menu(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
+  tui.select(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
     if name == nil then return end
     M.shelf(name):feed_vim()
   end)
