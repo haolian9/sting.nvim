@@ -25,7 +25,7 @@ do
         local held_idx = vim.fn.getloclist(0, { idx = 0 }).idx
         if held_idx < 1 then return jelly.debug("no lines in current quickfix list") end
         if held_idx ~= expect_idx then
-          vim.fn.setloclist({}, "a", { idx = expect_idx })
+          vim.fn.setloclist(winid, {}, "a", { idx = expect_idx })
           held_idx = expect_idx
         end
         ---@type sting.Pickle

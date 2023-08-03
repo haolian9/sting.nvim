@@ -20,7 +20,10 @@ local function Shelf(name)
       if self.flavor == nil then
         vim.fn.setqflist(self.shelf, " ")
       else
-        vim.fn.setqflist({}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
+        vim.fn.setqflist({}, " ", {
+          items = self.shelf,
+          quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end,
+        })
       end
     end
     last_fed_name = self.name

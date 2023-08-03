@@ -11,10 +11,10 @@ local strlib = require("infra.strlib")
 ---@field bufnr? number
 ---@field filename? string
 ---@field module? string
----@field lnum number
----@field end_lnum? number
----@field col number
----@field end_col? number
+---@field lnum number @1-based
+---@field end_lnum? number @1-based
+---@field col number @0-based
+---@field end_col? number @0-based, exclusive?
 ---@field vcol? 0|1
 ---@field text string
 ---@field type? 'E'|'W'|'N'
@@ -62,6 +62,7 @@ do
 
   function Prototype:reset() self.shelf = {} end
 
+---@param pickle sting.Pickle
   function Prototype:append(pickle) table.insert(self.shelf, pickle) end
 
   ---@param list sting.Pickle[]
@@ -75,7 +76,7 @@ do
   function Prototype:quickfixtextfunc(info)
     assert(self.flavor ~= nil)
     assert(info.start_idx == 1 and info.end_idx == #self.shelf)
-    return fn.concrete(fn.map(self.flavor, self.shelf))
+    return fn.tolist(fn.map(self.flavor, self.shelf))
   end
 
   ---@param name string
@@ -83,7 +84,7 @@ do
   ---@return sting.Shelf
   function M.Shelf(name, flavor)
     if flavor == true then flavor = default_flavor end
-    return setmetatable({ name = name, list = {}, flavor = flavor }, Prototype)
+    return setmetatable({ name = name, shelf = {}, flavor = flavor }, Prototype)
   end
 end
 
