@@ -10,25 +10,35 @@ local last_fed_name = nil
 ---@type {[string]: sting.Shelf}
 local shelves = {}
 
-local function Shelf(name)
-  local shelf = types.Shelf(name, true)
-  function shelf:feed_vim()
-    ---@diagnostic disable: invisible
-    if last_fed_name == self.name then return end
-    do
-      vim.fn.setqflist({}, "f")
-      if self.flavor == nil then
-        vim.fn.setqflist(self.shelf, " ")
-      else
-        vim.fn.setqflist({}, " ", {
-          items = self.shelf,
-          quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end,
-        })
+local Shelf
+do
+  ---@param name string
+  function Shelf(name)
+    local shelf = types.Shelf(name, true)
+    function shelf:feed_vim()
+      ---@diagnostic disable: invisible
+
+      --qflist has been set outside sting
+      if vim.fn.getqflist({ title = 1 }).title == last_fed_name then
+        if last_fed_name == self.name then return end
       end
+
+      do
+        vim.fn.setqflist({}, "f")
+        if self.flavor == nil then
+          vim.fn.setqflist(self.shelf, " ", { title = self.name })
+        else
+          vim.fn.setqflist({}, " ", {
+            title = self.name,
+            items = self.shelf,
+            quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end,
+          })
+        end
+      end
+      last_fed_name = self.name
     end
-    last_fed_name = self.name
+    return shelf
   end
-  return shelf
 end
 
 ---@param name string @the unique name for this shelf

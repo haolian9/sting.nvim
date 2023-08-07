@@ -16,7 +16,12 @@ local function Shelf(room, name)
 
   function shelf:feed_vim()
     ---@diagnostic disable: invisible
-    if self.room.last_fed_name == self.name then return end
+
+    --loclist has been set outside sting
+    if vim.fn.getloclist(self.room.winid, { title = 1 }).title == self.room.last_fed_name then
+      if self.room.last_fed_name == self.name then return end
+    end
+
     do
       vim.fn.setloclist(self.room.winid, {}, "f")
       if self.flavor == nil then
