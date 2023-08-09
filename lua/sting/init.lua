@@ -14,8 +14,6 @@
 ---* namespace
 ---* textfunc
 --
----todo:
----* utilize :cfile to share caches between nvim instances
 
 return {
   quickfix = require("sting.quickfix"),
