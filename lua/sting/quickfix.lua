@@ -5,8 +5,6 @@ local dictlib = require("infra.dictlib")
 local types = require("sting.types")
 local tui = require("tui")
 
-local last_fed_name = nil
-
 ---@type {[string]: sting.Shelf}
 local shelves = {}
 
@@ -17,25 +15,12 @@ do
     local shelf = types.Shelf(name, true)
     function shelf:feed_vim()
       ---@diagnostic disable: invisible
-
-      --qflist has been set outside sting
-      if vim.fn.getqflist({ title = 1 }).title == last_fed_name then
-        if last_fed_name == self.name then return end
+      vim.fn.setqflist({}, "f")
+      if self.flavor == nil then
+        vim.fn.setqflist(self.shelf, " ", { title = self.name })
+      else
+        vim.fn.setqflist({}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
       end
-
-      do
-        vim.fn.setqflist({}, "f")
-        if self.flavor == nil then
-          vim.fn.setqflist(self.shelf, " ", { title = self.name })
-        else
-          vim.fn.setqflist({}, " ", {
-            title = self.name,
-            items = self.shelf,
-            quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end,
-          })
-        end
-      end
-      last_fed_name = self.name
     end
     return shelf
   end

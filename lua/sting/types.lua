@@ -62,12 +62,14 @@ do
 
   function Prototype:reset() self.shelf = {} end
 
----@param pickle sting.Pickle
+  ---@param pickle sting.Pickle
   function Prototype:append(pickle) table.insert(self.shelf, pickle) end
 
   ---@param list sting.Pickle[]
   function Prototype:extend(list) listlib.extend(self.shelf, list) end
 
+  --NB: to avoid re-fill nvim the same list requires too much logic,
+  --which i dont think is worth it, and it'll not in a high frenquency
   function Prototype:feed_vim() error("not implemented") end
 
   ---@private

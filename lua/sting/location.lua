@@ -16,21 +16,12 @@ local function Shelf(room, name)
 
   function shelf:feed_vim()
     ---@diagnostic disable: invisible
-
-    --loclist has been set outside sting
-    if vim.fn.getloclist(self.room.winid, { title = 1 }).title == self.room.last_fed_name then
-      if self.room.last_fed_name == self.name then return end
+    vim.fn.setloclist(self.room.winid, {}, "f")
+    if self.flavor == nil then
+      vim.fn.setloclist(self.room.winid, self.shelf, " ")
+    else
+      vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
-
-    do
-      vim.fn.setloclist(self.room.winid, {}, "f")
-      if self.flavor == nil then
-        vim.fn.setloclist(self.room.winid, self.shelf, " ")
-      else
-        vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
-      end
-    end
-    self.room.last_fed_name = self.name
   end
   return shelf
 end
