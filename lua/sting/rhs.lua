@@ -42,7 +42,7 @@ do
         local pickle = vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
         bufnr = assert(pickle.bufnr)
       else
-        jelly.err("winid=%d, wininfo=%s", winid, vim.inspect(wininfo))
+        jelly.err("winid=%d, wininfo=%s", winid, wininfo)
         error("supposed to be in a quickfix/location window")
       end
       assert(bufnr ~= nil)
