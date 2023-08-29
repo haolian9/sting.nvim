@@ -1,5 +1,6 @@
 local M = {}
 
+local Augroup = require("infra.Augroup")
 local dictlib = require("infra.dictlib")
 local jelly = require("infra.jellyfish")("sting.location")
 
@@ -56,9 +57,9 @@ end
 local rooms = {}
 
 do
-  local aug = api.nvim_create_augroup("sting.location", { clear = true })
-  api.nvim_create_autocmd("winclosed", {
-    group = aug,
+  local aug = Augroup("sting://location")
+
+  aug:repeats("winclosed", {
     callback = function(args)
       local winid = tonumber(args.match)
       assert(winid ~= nil and winid >= 1000)
