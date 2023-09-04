@@ -4,6 +4,7 @@ local Augroup = require("infra.Augroup")
 local dictlib = require("infra.dictlib")
 local jelly = require("infra.jellyfish")("sting.location")
 
+local toggle = require("sting.toggle")
 local types = require("sting.types")
 local tui = require("tui")
 
@@ -13,6 +14,7 @@ local api = vim.api
 ---@param name string
 local function Shelf(room, name)
   local shelf = types.Shelf(name, true)
+  ---@diagnostic disable-next-line: inject-field
   shelf.room = room
 
   function shelf:feed_vim()
@@ -23,6 +25,8 @@ local function Shelf(room, name)
     else
       vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
+
+    toggle.open_locwin()
   end
   return shelf
 end

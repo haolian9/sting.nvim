@@ -2,6 +2,7 @@ local M = {}
 
 local dictlib = require("infra.dictlib")
 
+local toggle = require("sting.toggle")
 local types = require("sting.types")
 local tui = require("tui")
 
@@ -21,6 +22,8 @@ do
       else
         vim.fn.setqflist({}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
       end
+
+      toggle.open_qfwin()
     end
     return shelf
   end

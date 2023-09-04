@@ -2,20 +2,14 @@ local M = {}
 
 local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.rhs")
+local winsplit = require("infra.winsplit")
 
 local api = vim.api
 
 do
-  local splitcmds = {
-    above = "aboveleft split",
-    below = "belowright split",
-    left = "aboveleft vsplit",
-    right = "belowright vsplit",
-  }
-
-  ---@param mode 'above'|'below'|'left'|'right'
-  function M.split(mode)
-    local bufnr
+  ---@param side infra.winsplit.Sides
+  function M.split(side)
+    local pickle
     do
       local winid = api.nvim_get_current_win()
       local wininfo = vim.fn.getwininfo(winid)[1]
@@ -29,8 +23,7 @@ do
           held_idx = expect_idx
         end
         ---@type sting.Pickle
-        local pickle = vim.fn.getloclist(0, { idx = held_idx, items = 0 }).items[1]
-        bufnr = assert(pickle.bufnr)
+        pickle = vim.fn.getloclist(0, { idx = held_idx, items = 0 }).items[1]
       elseif wininfo.quickfix == 1 then
         local held_idx = vim.fn.getqflist({ idx = 0 }).idx
         if held_idx < 1 then return jelly.debug("no lines in current location list") end
@@ -39,20 +32,20 @@ do
           held_idx = expect_idx
         end
         ---@type sting.Pickle
-        local pickle = vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
-        bufnr = assert(pickle.bufnr)
+        pickle = vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
       else
         jelly.err("winid=%d, wininfo=%s", winid, wininfo)
         error("supposed to be in a quickfix/location window")
       end
-      assert(bufnr ~= nil)
+      assert(pickle.bufnr and pickle.lnum and pickle.col)
     end
 
     do
       ex("wincmd", "p")
-      ex(assert(splitcmds[mode]))
+      winsplit(side)
       local winid = api.nvim_get_current_win()
-      api.nvim_win_set_buf(winid, bufnr)
+      api.nvim_win_set_buf(winid, pickle.bufnr)
+      api.nvim_win_set_cursor(winid, { pickle.lnum, pickle.col - 1 })
     end
   end
 end

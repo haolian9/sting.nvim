@@ -18,4 +18,6 @@
 return {
   quickfix = require("sting.quickfix"),
   location = require("sting.location"),
+  rhs = require("sting.rhs"),
+  toggle = require("sting.toggle"),
 }
