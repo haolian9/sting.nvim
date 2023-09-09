@@ -1,6 +1,7 @@
 local M = {}
 
 local dictlib = require("infra.dictlib")
+local ex = require("infra.ex")
 
 local toggle = require("sting.toggle")
 local types = require("sting.types")
@@ -24,6 +25,7 @@ do
       end
 
       toggle.open_qfwin()
+      ex("cc 1") -- goto the first entry
     end
     return shelf
   end

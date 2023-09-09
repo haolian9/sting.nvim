@@ -7,7 +7,7 @@ local winsplit = require("infra.winsplit")
 local api = vim.api
 
 do
-  ---@param side infra.winsplit.Sides
+  ---@param side infra.winsplit.Side
   function M.split(side)
     local pickle
     do

@@ -2,6 +2,7 @@ local M = {}
 
 local Augroup = require("infra.Augroup")
 local dictlib = require("infra.dictlib")
+local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.location")
 
 local toggle = require("sting.toggle")
@@ -27,6 +28,7 @@ local function Shelf(room, name)
     end
 
     toggle.open_locwin()
+    ex("ll 1") -- goto the first entry
   end
   return shelf
 end

@@ -4,7 +4,7 @@ local M = {}
 
 local ex = require("infra.ex")
 local fn = require("infra.fn")
-local jelly = require("infra.jellyfish")("sting.toggle", "debug")
+local jelly = require("infra.jellyfish")("sting.toggle", "info")
 local strlib = require("infra.strlib")
 
 local default_height = 10
