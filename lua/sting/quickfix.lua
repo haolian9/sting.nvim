@@ -10,25 +10,22 @@ local tui = require("tui")
 ---@type {[string]: sting.Shelf}
 local shelves = {}
 
-local Shelf
-do
-  ---@param name string
-  function Shelf(name)
-    local shelf = types.Shelf(name, true)
-    function shelf:feed_vim()
-      ---@diagnostic disable: invisible
-      vim.fn.setqflist({}, "f")
-      if self.flavor == nil then
-        vim.fn.setqflist(self.shelf, " ", { title = self.name })
-      else
-        vim.fn.setqflist({}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
-      end
-
-      toggle.open_qfwin()
-      ex("cc 1") -- goto the first entry
+---@param name string
+local function Shelf(name)
+  local shelf = types.Shelf(name, true)
+  function shelf:feed_vim()
+    ---@diagnostic disable: invisible
+    vim.fn.setqflist({}, "f")
+    if self.flavor == nil then
+      vim.fn.setqflist(self.shelf, " ", { title = self.name })
+    else
+      vim.fn.setqflist({}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
-    return shelf
+
+    toggle.open_qfwin()
+    ex("cc 1") -- goto the first entry
   end
+  return shelf
 end
 
 ---@param name string @the unique name for this shelf
