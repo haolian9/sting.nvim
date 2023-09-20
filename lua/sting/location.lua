@@ -18,7 +18,7 @@ local function Shelf(room, name)
   ---@diagnostic disable-next-line: inject-field
   shelf.room = room
 
-  function shelf:feed_vim()
+  function shelf:feed_vim(open_win, goto_first)
     ---@diagnostic disable: invisible
     vim.fn.setloclist(self.room.winid, {}, "f")
     if self.flavor == nil then
@@ -27,8 +27,11 @@ local function Shelf(room, name)
       vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
 
+    if not open_win then return end
     toggle.open_locwin()
-    ex("ll 1") -- goto the first entry
+
+    if not goto_first then return end
+    ex("ll 1")
   end
   return shelf
 end
@@ -52,7 +55,7 @@ do
     tui.select(dictlib.keys(self.shelves), { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
       if name == nil then return end
       if name == self.last_fed_name then return end
-      assert(self.shelves[name]):feed_vim()
+      assert(self.shelves[name]):feed_vim(true, false)
     end)
   end
 

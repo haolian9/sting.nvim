@@ -70,7 +70,9 @@ do
 
   --NB: to avoid re-fill nvim the same list requires too much logic,
   --which i dont think is worth it, and it'll not in a high frenquency
-  function Prototype:feed_vim() error("not implemented") end
+  ---@param open_win boolean
+  ---@param goto_first boolean
+  function Prototype:feed_vim(open_win, goto_first) error("not implemented") end
 
   ---@private
   ---@param info {quickfix: 0|1, winid: integer, id: integer, start_idx: integer, end_idx: integer}

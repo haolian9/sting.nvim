@@ -13,7 +13,8 @@ local shelves = {}
 ---@param name string
 local function Shelf(name)
   local shelf = types.Shelf(name, true)
-  function shelf:feed_vim()
+
+  function shelf:feed_vim(open_win, goto_first)
     ---@diagnostic disable: invisible
     vim.fn.setqflist({}, "f")
     if self.flavor == nil then
@@ -22,8 +23,11 @@ local function Shelf(name)
       vim.fn.setqflist({}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
 
+    if not open_win then return end
     toggle.open_qfwin()
-    ex("cc 1") -- goto the first entry
+
+    if not goto_first then return end
+    ex("cc 1")
   end
   return shelf
 end
@@ -38,7 +42,7 @@ end
 function M.switch()
   tui.select(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
     if name == nil then return end
-    M.shelf(name):feed_vim()
+    M.shelf(name):feed_vim(true, false)
   end)
 end
 
