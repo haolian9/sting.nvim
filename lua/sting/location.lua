@@ -7,7 +7,7 @@ local jelly = require("infra.jellyfish")("sting.location")
 
 local toggle = require("sting.toggle")
 local types = require("sting.types")
-local tui = require("tui")
+local puff = require("puff")
 
 local api = vim.api
 
@@ -52,7 +52,7 @@ do
   end
 
   function Prototype:switch()
-    tui.select(dictlib.keys(self.shelves), { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
+    puff.select(dictlib.keys(self.shelves), { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
       if name == nil then return end
       if name == self.last_fed_name then return end
       assert(self.shelves[name]):feed_vim(true, false)

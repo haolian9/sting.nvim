@@ -5,7 +5,7 @@ local ex = require("infra.ex")
 
 local toggle = require("sting.toggle")
 local types = require("sting.types")
-local tui = require("tui")
+local puff = require("puff")
 
 ---@type {[string]: sting.Shelf}
 local shelves = {}
@@ -40,7 +40,7 @@ function M.shelf(name)
 end
 
 function M.switch()
-  tui.select(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
+  puff.select(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
     if name == nil then return end
     M.shelf(name):feed_vim(true, false)
   end)
