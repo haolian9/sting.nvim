@@ -2,10 +2,11 @@ local M = {}
 
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
+local jelly = require("infra.jellyfish")("sting.quickfix", "debug")
 
+local puff = require("puff")
 local toggle = require("sting.toggle")
 local types = require("sting.types")
-local puff = require("puff")
 
 ---@type {[string]: sting.Shelf}
 local shelves = {}
@@ -40,7 +41,9 @@ function M.shelf(name)
 end
 
 function M.switch()
-  puff.select(dictlib.keys(shelves), { prompt = "switch quickfix shelves" }, function(name)
+  local choices = dictlib.keys(shelves)
+  if #choices == 0 then return jelly.info("no quickfix shelves") end
+  puff.select(choices, { prompt = "switch quickfix shelves" }, function(name)
     if name == nil then return end
     M.shelf(name):feed_vim(true, false)
   end)
