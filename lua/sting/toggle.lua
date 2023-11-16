@@ -49,6 +49,7 @@ function M.qfwin(tabnr, height)
   if qo then return ex("cclose") end
   if lo then ex("lclose") end
   open("cwin", height)
+  ex("wincmd", "J")
 end
 
 ---@param tabnr? number
@@ -79,6 +80,7 @@ function M.open_qfwin(tabnr, height)
   if qo then return end
   if lo then ex("lclose") end
   open("cwin", height)
+  ex("wincmd", "J")
 end
 
 return M
