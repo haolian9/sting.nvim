@@ -33,7 +33,7 @@ do
   local function default_flavor(pickle)
     local text
     if pickle.text ~= nil then
-      text = strlib.ltrim(pickle.text)
+      text = strlib.lstrip(pickle.text)
     else
       text = ""
     end

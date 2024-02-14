@@ -70,7 +70,7 @@ local rooms = {}
 do
   local aug = Augroup("sting://location")
 
-  aug:repeats("winclosed", {
+  aug:repeats("WinClosed", {
     callback = function(args)
       local winid = tonumber(args.match)
       assert(winid ~= nil and winid >= 1000)
