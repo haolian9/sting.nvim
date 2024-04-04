@@ -56,28 +56,28 @@ do
   ---@field private name string
   ---@field private flavor? fun(pickle: sting.Pickle): string
   ---@field private shelf sting.Pickle[]
-  local Prototype = {}
+  local Impl = {}
 
-  Prototype.__index = Prototype
+  Impl.__index = Impl
 
-  function Prototype:reset() self.shelf = {} end
+  function Impl:reset() self.shelf = {} end
 
   ---@param pickle sting.Pickle
-  function Prototype:append(pickle) table.insert(self.shelf, pickle) end
+  function Impl:append(pickle) table.insert(self.shelf, pickle) end
 
   ---@param list sting.Pickle[]
-  function Prototype:extend(list) listlib.extend(self.shelf, list) end
+  function Impl:extend(list) listlib.extend(self.shelf, list) end
 
   --NB: to avoid re-fill nvim the same list requires too much logic,
   --which i dont think is worth it, and it'll not in a high frenquency
   ---@param open_win boolean
   ---@param goto_first boolean
-  function Prototype:feed_vim(open_win, goto_first) error("not implemented") end
+  function Impl:feed_vim(open_win, goto_first) error("not implemented") end
 
   ---@private
   ---@param info {quickfix: 0|1, winid: integer, id: integer, start_idx: integer, end_idx: integer}
   ---@return string[]
-  function Prototype:quickfixtextfunc(info)
+  function Impl:quickfixtextfunc(info)
     assert(self.flavor ~= nil)
     assert(info.start_idx == 1 and info.end_idx == #self.shelf)
     return fn.tolist(fn.map(self.flavor, self.shelf))
@@ -88,7 +88,7 @@ do
   ---@return sting.Shelf
   function M.Shelf(name, flavor)
     if flavor == true then flavor = default_flavor end
-    return setmetatable({ name = name, shelf = {}, flavor = flavor }, Prototype)
+    return setmetatable({ name = name, shelf = {}, flavor = flavor }, Impl)
   end
 end
 

@@ -1,6 +1,6 @@
 local M = {}
 
-local Augroup = require("infra.Augroup")
+local augroups = require("infra.augroups")
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.location")
@@ -42,16 +42,16 @@ do
   ---@field private winid number
   ---@field private last_fed_name string?
   ---@field private shelves {[string]: sting.Shelf}
-  local Prototype = {}
-  Prototype.__index = Prototype
+  local Impl = {}
+  Impl.__index = Impl
 
   ---@param name string
-  function Prototype:shelf(name)
+  function Impl:shelf(name)
     if self.shelves[name] == nil then self.shelves[name] = Shelf(self, name) end
     return self.shelves[name]
   end
 
-  function Prototype:switch()
+  function Impl:switch()
     local choices = dictlib.keys(self.shelves)
     if #choices == 0 then return jelly.info('no location shelves') end
     puff.select(choices, { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
@@ -61,14 +61,14 @@ do
     end)
   end
 
-  function Room(winid) return setmetatable({ winid = winid, shelves = {} }, Prototype) end
+  function Room(winid) return setmetatable({ winid = winid, shelves = {} }, Impl) end
 end
 
 ---@type {[integer]: sting.location.Room}
 local rooms = {}
 
 do
-  local aug = Augroup("sting://location")
+  local aug = augroups.Augroup("sting://location")
 
   aug:repeats("WinClosed", {
     callback = function(args)
