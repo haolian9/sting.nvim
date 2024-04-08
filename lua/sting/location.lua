@@ -31,7 +31,7 @@ local function Shelf(room, name)
     toggle.open_locwin()
 
     if not goto_first then return end
-    ex("ll 1")
+    ex.eval("ll 1")
   end
   return shelf
 end

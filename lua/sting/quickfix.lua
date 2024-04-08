@@ -28,7 +28,7 @@ local function Shelf(name)
     toggle.open_qfwin()
 
     if not goto_first then return end
-    ex("cc 1")
+    ex.eval("cc 1")
   end
   return shelf
 end
