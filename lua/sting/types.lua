@@ -47,7 +47,7 @@ do
       fpath = ""
     end
 
-    local lnum = fn.nilor(pickle.lnum, 0)
+    local lnum = pickle.lnum or 0
 
     return string.format("%s|%d|%s", fpath, lnum, text)
   end
