@@ -46,10 +46,8 @@ do
 
     do
       ex("wincmd", "p")
-      winsplit(side)
-      local winid = api.nvim_get_current_win()
-      api.nvim_win_set_buf(winid, pickle.bufnr)
-      wincursor.g1(winid, pickle.lnum, pickle.col - 1) --pickle.lnum is 1-based, and .col is exclusive it seems
+      winsplit(side, pickle.bufnr)
+      wincursor.g1(0, pickle.lnum, pickle.col - 1) --pickle.lnum is 1-based, and .col is exclusive it seems
     end
   end
 end
