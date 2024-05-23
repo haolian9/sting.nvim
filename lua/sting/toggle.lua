@@ -1,7 +1,7 @@
 local M = {}
 
 local ex = require("infra.ex")
-local fn = require("infra.fn")
+local itertools = require("infra.itertools")
 local jelly = require("infra.jellyfish")("sting.toggle", "info")
 local prefer = require("infra.prefer")
 local strlib = require("infra.strlib")
@@ -32,7 +32,7 @@ end
 ---@return fun(): {quickfix: 0|1, loclist: 0|1}?
 local function iter_wininfo(tabid)
   tabid = tabid or api.nvim_get_current_tabpage()
-  return fn.map(function(winid) return vim.fn.getwininfo(winid)[1] end, vim.api.nvim_tabpage_list_wins(tabid))
+  return itertools.map(function(winid) return vim.fn.getwininfo(winid)[1] end, vim.api.nvim_tabpage_list_wins(tabid))
 end
 
 ---@param tabid integer
