@@ -3,7 +3,7 @@
 local M = {}
 
 local fs = require("infra.fs")
-local itertools = require("infra.itertools")
+local its = require("infra.its")
 local listlib = require("infra.listlib")
 local strlib = require("infra.strlib")
 
@@ -80,7 +80,7 @@ do
   function Impl:quickfixtextfunc(info)
     assert(self.flavor ~= nil)
     assert(info.start_idx == 1 and info.end_idx == #self.shelf)
-    return itertools.tolist(itertools.map(self.flavor, self.shelf))
+    return its(self.shelf):map(self.flavor):tolist()
   end
 
   ---@param name string
