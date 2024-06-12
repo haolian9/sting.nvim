@@ -34,8 +34,7 @@ do
       return vim.fn.getqflist({ idx = held_idx, items = 0 }).items[1]
     end
 
-    jelly.err("winid=%d, wininfo=%s", winid, wininfo)
-    error("supposed to be in a quickfix/location window")
+    return jelly.fatal("RuntimeError", "supposed to be in a quickfix/location window: winid=%d, wininfo=%s", winid, wininfo)
   end
 
   ---@param side infra.winsplit.Side
