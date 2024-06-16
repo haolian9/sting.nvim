@@ -3,10 +3,9 @@ local M = {}
 local ex = require("infra.ex")
 local itertools = require("infra.itertools")
 local jelly = require("infra.jellyfish")("sting.toggle", "info")
+local ni = require("infra.ni")
 local prefer = require("infra.prefer")
 local strlib = require("infra.strlib")
-
-local api = vim.api
 
 local default_max_height = 10
 
@@ -16,7 +15,7 @@ local default_max_height = 10
 ---@return boolean
 local function cwin(height)
   ex.eval("cwin %d", height)
-  return prefer.bo(api.nvim_get_current_buf(), "buftype") == "quickfix"
+  return prefer.bo(ni.get_current_buf(), "buftype") == "quickfix"
 end
 
 ---@param height integer
@@ -31,8 +30,8 @@ end
 ---@param tabid integer
 ---@return fun(): {quickfix: 0|1, loclist: 0|1}?
 local function iter_wininfo(tabid)
-  tabid = tabid or api.nvim_get_current_tabpage()
-  return itertools.map(function(winid) return vim.fn.getwininfo(winid)[1] end, vim.api.nvim_tabpage_list_wins(tabid))
+  tabid = tabid or ni.get_current_tabpage()
+  return itertools.map(function(winid) return vim.fn.getwininfo(winid)[1] end, ni.tabpage_list_wins(tabid))
 end
 
 ---@param tabid integer
@@ -57,7 +56,7 @@ do
   ---@param max_height? integer
   ---@param keep_open boolean
   local function main(tabid, max_height, keep_open)
-    tabid = tabid or api.nvim_get_current_tabpage()
+    tabid = tabid or ni.get_current_tabpage()
     max_height = max_height or default_max_height
 
     local co, lo = has_opened_cl(tabid)
@@ -89,7 +88,7 @@ do
   ---@param max_height? integer
   ---@param keep_open boolean
   local function main(tabid, max_height, keep_open)
-    tabid = tabid or api.nvim_get_current_tabpage()
+    tabid = tabid or ni.get_current_tabpage()
     max_height = max_height or default_max_height
 
     local co, lo = has_opened_cl(tabid)

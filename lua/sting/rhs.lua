@@ -2,15 +2,14 @@ local M = {}
 
 local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.rhs")
+local ni = require("infra.ni")
 local wincursor = require("infra.wincursor")
 local winsplit = require("infra.winsplit")
-
-local api = vim.api
 
 do
   ---@return nil|sting.Pickle
   local function resolve_current_pickle()
-    local winid = api.nvim_get_current_win()
+    local winid = ni.get_current_win()
     local wininfo = vim.fn.getwininfo(winid)[1]
     local expect_idx = wincursor.row(winid)
     ---must check loclist first, as .quickfix=1 in both location and quickfix window

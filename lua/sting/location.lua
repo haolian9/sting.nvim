@@ -4,12 +4,11 @@ local augroups = require("infra.augroups")
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.location")
+local ni = require("infra.ni")
 
 local puff = require("puff")
 local toggle = require("sting.toggle")
 local types = require("sting.types")
-
-local api = vim.api
 
 ---@param room sting.location.Room
 ---@param name string
@@ -53,7 +52,7 @@ do
 
   function Impl:switch()
     local choices = dictlib.keys(self.shelves)
-    if #choices == 0 then return jelly.info('no location shelves') end
+    if #choices == 0 then return jelly.info("no location shelves") end
     puff.select(choices, { prompt = string.format("switch location shelves in win#%d", self.winid) }, function(name)
       if name == nil then return end
       if name == self.last_fed_name then return end
@@ -86,7 +85,7 @@ function M.shelf(winid, name)
 end
 
 function M.switch(winid)
-  winid = winid or api.nvim_get_current_win()
+  winid = winid or ni.get_current_win()
   assert(winid ~= 0)
   if rooms[winid] == nil then return jelly.info("no shelves under win#%d", winid) end
   rooms[winid]:switch()
