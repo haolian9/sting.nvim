@@ -31,7 +31,7 @@ end
 ---@return fun(): {quickfix: 0|1, loclist: 0|1}?
 local function iter_wininfo(tabid)
   tabid = tabid or ni.get_current_tabpage()
-  return itertools.map(function(winid) return vim.fn.getwininfo(winid)[1] end, ni.tabpage_list_wins(tabid))
+  return itertools.map(ni.tabpage_list_wins(tabid), function(winid) return vim.fn.getwininfo(winid)[1] end)
 end
 
 ---@param tabid integer
