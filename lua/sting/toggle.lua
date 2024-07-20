@@ -23,7 +23,7 @@ end
 local function lwin(height)
   local ok, err = pcall(ex.eval, "lwin %d", height)
   if ok then return true end
-  assert(err and strlib.find(err, "E776"), err)
+  assert(err and strlib.contains(err, "E776"), err)
   return false
 end
 
