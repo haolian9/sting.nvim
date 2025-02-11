@@ -40,7 +40,7 @@ do
 
     local fpath
     if pickle.filename ~= nil then
-      fpath = fs.shorten(pickle.filename)
+      fpath = fs.shorten(pickle.filename, true)
     elseif pickle.bufnr ~= nil then
       fpath = string.format("buf#%d", pickle.bufnr)
     else

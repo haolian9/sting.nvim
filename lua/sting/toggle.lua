@@ -15,6 +15,8 @@ local default_max_height = 10
 ---@return boolean
 local function cwin(height)
   ex.eval("cwin %d", height)
+  --NB: ftplugin/qf.vim 会暗中破坏, 不过我禁用了ftplugin功能
+  -- ex("setlocal", "statusline<")
   return prefer.bo(ni.get_current_buf(), "buftype") == "quickfix"
 end
 
