@@ -3,7 +3,6 @@ local M = {}
 local augroups = require("infra.augroups")
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
-local feedkeys = require("infra.feedkeys")
 local jelly = require("infra.jellyfish")("sting.rhs")
 local ni = require("infra.ni")
 local prefer = require("infra.prefer")
@@ -126,7 +125,7 @@ do
 
   function M.open()
     close_preview_win()
-    feedkeys("<cr>", "n")
+    ex.eval(".cc")
   end
 end
 
