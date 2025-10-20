@@ -3,6 +3,7 @@ local M = {}
 local augroups = require("infra.augroups")
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
+local feedkeys = require("infra.feedkeys")
 local jelly = require("infra.jellyfish")("sting.rhs")
 local ni = require("infra.ni")
 local prefer = require("infra.prefer")
@@ -50,7 +51,11 @@ function M.split(side)
   do
     ex("wincmd", "p")
     winsplit(side, pickle.bufnr)
-    wincursor.g1(0, pickle.lnum, pickle.col - 1) --pickle.lnum is 1-based, and .col is exclusive it seems
+    wincursor.g1(
+      0,
+      pickle.lnum, --.lnum is 1-based
+      math.max(0, pickle.col - 1) --.col is exclusive it seems
+    )
   end
 end
 
@@ -125,7 +130,7 @@ do
 
   function M.open()
     close_preview_win()
-    ex.eval(".cc")
+    feedkeys("<cr>", "n")
   end
 end
 
