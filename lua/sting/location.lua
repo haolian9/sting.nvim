@@ -21,9 +21,9 @@ local function Shelf(room, name)
     ---@diagnostic disable: invisible
     vim.fn.setloclist(self.room.winid, {}, "f")
     if self.flavor == nil then
-      vim.fn.setloclist(self.room.winid, self.shelf, " ")
+      vim.fn.setloclist(self.room.winid, self.shelf, " ", { title = self.name })
     else
-      vim.fn.setloclist(self.room.winid, {}, " ", { items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
+      vim.fn.setloclist(self.room.winid, {}, " ", { title = self.name, items = self.shelf, quickfixtextfunc = function(...) return self:quickfixtextfunc(...) end })
     end
 
     if not open_win then return end
