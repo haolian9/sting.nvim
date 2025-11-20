@@ -71,8 +71,6 @@ do
   ---@param ctx_lines integer
   ---@return table
   local function resolve_preview_winpos(ctx_lines)
-    --todo: more natural pos depends on qf-win
-
     return {
       relative = "win",
       anchor = "SW",

@@ -4,6 +4,7 @@ local augroups = require("infra.augroups")
 local dictlib = require("infra.dictlib")
 local ex = require("infra.ex")
 local jelly = require("infra.jellyfish")("sting.location")
+local mi = require("infra.mi")
 local ni = require("infra.ni")
 
 local puff = require("puff")
@@ -85,7 +86,7 @@ function M.shelf(winid, name)
 end
 
 function M.switch(winid)
-  winid = winid or ni.get_current_win()
+  winid = mi.resolve_winid_param(winid)
   assert(winid ~= 0)
   if rooms[winid] == nil then return jelly.info("no shelves under win#%d", winid) end
   rooms[winid]:switch()
