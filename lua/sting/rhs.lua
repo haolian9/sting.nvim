@@ -68,16 +68,17 @@ do
     ni.win_close(preview_winid, false)
   end
 
+  ---@param qf_winid integer
   ---@param ctx_lines integer
   ---@return table
-  local function resolve_preview_winpos(ctx_lines)
+  local function resolve_preview_winpos(qf_winid, ctx_lines)
     return {
       relative = "win",
       anchor = "SW",
       row = 0,
       col = 0,
       height = (2 * ctx_lines) + 1,
-      width = vim.go.columns,
+      width = ni.win_get_width(qf_winid) - 1,
       border = "single",
     }
   end
@@ -110,7 +111,8 @@ do
     do
       --by default no syn/ft/ts/lsp ...
       local winopts = { noautocmd = true, focusable = false }
-      dictlib.merge(winopts, resolve_preview_winpos(3))
+      local qf_winid = ni.get_current_win()
+      dictlib.merge(winopts, resolve_preview_winpos(qf_winid, 3))
 
       preview_winid = rifts.open.win(bufnr, false, winopts)
       ni.win_set_hl_ns(preview_winid, rifts.ns)
