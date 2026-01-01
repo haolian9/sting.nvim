@@ -15,9 +15,11 @@
 ---* textfunc
 --
 
+local oop = require("infra.oop")
+
 return {
-  quickfix = require("sting.quickfix"),
-  location = require("sting.location"),
-  rhs = require("sting.rhs"),
-  toggle = require("sting.toggle"),
+  quickfix = oop.proxy("sting.quickfix"),
+  location = oop.proxy("sting.location"),
+  rhs = oop.proxy("sting.rhs"),
+  toggle = oop.proxy("sting.toggle"),
 }
